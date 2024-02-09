@@ -10,16 +10,20 @@ class HomePage extends ConsumerWidget {
     final getWeathersPrv = ref.watch(getWeathersProvider);
     return getWeathersPrv.when(
       data: (data) {
-        return RefreshIndicator(
-          child: ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (context, index) {
+        if(data.isNotEmpty) {
+          return RefreshIndicator(
+            child: ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
                 final item = data[index];
                 return const Row();
-            },
-          ),
-          onRefresh: () => ref.refresh(getWeathersProvider.future),
-        );
+              },
+            ),
+            onRefresh: () => ref.refresh(getWeathersProvider.future),
+          );
+        }else{
+          return const Center(child: Text('Veri bulunamadı :('),);
+        }
       },
       error: (error, stackTrace) => Center(
         child: Text('Bir hata meydana geldi : ${error.toString()}'),
