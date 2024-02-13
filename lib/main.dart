@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/sqlite/sqlite_helper.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,8 +23,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-
-
   final String title;
 
   @override
@@ -35,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() async{
+  void _incrementCounter() async {
     setState(() {
       _counter++;
     });
