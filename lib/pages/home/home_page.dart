@@ -1,34 +1,53 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weather_app/pages/home/states/home_states.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final getWeathersPrv = ref.watch(getWeathersProvider);
-    return getWeathersPrv.when(
-      data: (data) {
-        if(data.isNotEmpty) {
-          return RefreshIndicator(
-            child: ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                final item = data[index];
-                return const Row();
-              },
-            ),
-            onRefresh: () => ref.refresh(getWeathersProvider.future),
-          );
-        }else{
-          return const Center(child: Text('Veri bulunamadı :('),);
-        }
-      },
-      error: (error, stackTrace) => Center(
-        child: Text('Bir hata meydana geldi : ${error.toString()}'),
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+
+  @override
+  Widget build(BuildContext context) {
+    final getWeathersPrv = ref.watch(getWeatherProvider);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Anasayfa'),
+        actions: [
+          IconButton(onPressed: (){}, icon: const Icon(Icons.search))
+        ],
       ),
-      loading: () => const CircularProgressIndicator(),
+      body: getWeathersPrv.when(
+        data: (data) {
+          if (data != null) {
+            return RefreshIndicator(
+              onRefresh: () => ref.refresh(getWeatherProvider.future),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Card(
+                      child: Center(
+                          child: Text(
+                              "Minimum : ${data.temperature["Minimum"]["Value"]}F\nMaximum : ${data.temperature["Maximum"]["Value"]}F")),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          } else {
+            return const Center(child: Text('Veri Yok'));
+          }
+        },
+        error: (error, stackTrace) => Center(
+          child: Text('Bir hata meydana geldi : ${error.toString()}'),
+        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }
