@@ -9,9 +9,11 @@ part of 'location.dart';
 Location _$LocationFromJson(Map<String, dynamic> json) => Location(
       key: json['Key'] as String,
       locationName: json['EnglishName'] as String,
+      country: json['Country'] as Map<String, dynamic>,
     );
 
 Map<String, dynamic> _$LocationToJson(Location instance) => <String, dynamic>{
       'Key': instance.key,
       'EnglishName': instance.locationName,
+      'Country': instance.country,
     };
